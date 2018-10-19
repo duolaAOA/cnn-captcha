@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.doubanio.com/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+captcha = "*"
+pillow = "*"
+tensorflow = "*"
+matplotlib = "*"
+pycrypto = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"
