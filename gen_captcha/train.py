@@ -10,7 +10,7 @@ from settings import settings as arg_settings
 
 CHAR_SET_LEN = arg_settings["char_set_len"]
 MAX_CAPTCHA = arg_settings["max_captcha"]
-
+ACC_BREAK = 0.99
 
 class TrainCNN:
     def __init__(self):
@@ -18,7 +18,6 @@ class TrainCNN:
 
     def train(self):
         output = self.model.create_model()
-        # output = self.model.create()
         predict = tf.reshape(output, [-1, MAX_CAPTCHA, CHAR_SET_LEN])
         label = tf.reshape(settings.Y, [-1, MAX_CAPTCHA, CHAR_SET_LEN])
 
@@ -32,14 +31,13 @@ class TrainCNN:
                     logits=predict, labels=label))
 
         tf.summary.scalar('my_loss', loss)
-        # optimizer 为了加快训练 learning_rate应该开始大，然后慢慢衰
         optimizer = tf.train.AdamOptimizer(learning_rate=0.001).minimize(loss)
 
         with tf.name_scope('my_monitor'):
             accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
         tf.summary.scalar('my_accuracy', accuracy)
 
-        saver = tf.train.Saver()  # 将训练过程进行保存
+        saver = tf.train.Saver()
         sess = tf.InteractiveSession(
             config=tf.ConfigProto(log_device_placement=False))
         sess.run(tf.global_variables_initializer())
@@ -66,9 +64,8 @@ class TrainCNN:
             if step % 100 != 0:
                 continue
 
-            # 每50 step计算一次准确率，使用新生成的数据
             batch_x_test, batch_y_test = ImageHandler.gen_next_batch(
-                64)  # 新生成的数据集个来做测试
+                64)  # 新生成数据集个测试
             acc = sess.run(
                 accuracy,
                 feed_dict={
@@ -76,10 +73,10 @@ class TrainCNN:
                     settings.Y: batch_y_test,
                     settings.keep_prob: 1.
                 })
-            print(step, 'acc---------------------------------\t', acc)
+            print(step, 'acc-------------------\t', acc)
 
             # 终止条件
-            if acc > 0.99:
+            if acc > ACC_BREAK:
                 break
 
 
