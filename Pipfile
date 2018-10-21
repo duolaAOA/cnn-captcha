@@ -6,9 +6,9 @@ name = "pypi"
 [packages]
 captcha = "*"
 pillow = "*"
-tensorflow = "*"
 matplotlib = "*"
 pycrypto = "*"
+tensorflow = "==1.1.0"
 
 [dev-packages]
 
