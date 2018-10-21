@@ -2,6 +2,7 @@
 # encoding=utf-8
 
 import os
+import sys
 import json
 from random import choice
 from string import ascii_lowercase, digits
@@ -10,14 +11,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from captcha.image import Image, ImageCaptcha
 
+sys.path.append(os.path.abspath(__file__).rsplit(os.sep, 2)[0])
 from utils.AES_utils import Base64AESCBC, MyCrypt
-from utils.utils import make_dir
+from utils.utils import FileDirHelper
 
 alphabets = ascii_lowercase + digits
 
-
-train_data_dir = make_dir("/data/captcha/image/train/")
-test_data_dir = make_dir("/data/captcha/image/test/")
+train_data_dir = FileDirHelper.make_dir("/data/captcha/image/train/")
+test_data_dir = FileDirHelper.make_dir("/data/captcha/image/test/")
 
 
 class Captcha:
@@ -43,26 +44,32 @@ class Captcha:
         captcha_img = np.array(captcha_img)
         return captcha_code, captcha_img
 
-    def gen_captcha_code_and_image(self, index):
+    def _gen_captcha_code_and_image(self, index):
         while True:
             code, image = self.gen_captcha_text_and_image()
             if image.shape == (60, 160, 3):
                 self.img.write(code, str(index) + '-' + code + '.jpg')
                 return
 
+    def gen_captcha_code_and_image(self):
+        while True:
+            code, image = self.gen_captcha_text_and_image()
+            if image.shape == (60, 160, 3):
+                return code, image
+
 
 
     def generateMassImages(self, usage_purpose="train"):
         if usage_purpose == "train":
             os.chdir(train_data_dir)
-            for i in range(20000):
+            for i in range(1000):
                 self.gen_captcha_code_and_image(i)
                 print("train images:" + str(i) + ' images')
 
         if usage_purpose == "test":
             os.chdir(test_data_dir)
-            for i in range(20000):
-                self.gen_captcha_code_and_image(i)
+            for i in range(5000):
+                self._gen_captcha_code_and_image(i)
                 print("test images:" + str(i) + ' images')
 
 
@@ -86,5 +93,3 @@ def main():
 
 
 
-if __name__ == '__main__':
-    main()
