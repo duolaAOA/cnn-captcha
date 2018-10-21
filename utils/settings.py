@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # encoding=utf-8
 
-
 from hashlib import sha256
-
 
 settings = {
     "key": sha256('captcha'.encode()).digest(),

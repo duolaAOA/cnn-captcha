@@ -3,15 +3,11 @@
 
 import numpy as np
 
-
 from captcha.image import Image
 
 from gen_captcha_img import Captcha
-from settings import settings as arg_settings
 from utils.utils import FileDirHelper
-
-
-
+from settings import settings as arg_settings
 
 # 验证码图片的存放路径
 IMAGE_PATH = arg_settings["image_path"]
@@ -24,15 +20,10 @@ IMAGE_HEIGHT = arg_settings["height"]
 CHAR_SET_LEN = arg_settings["char_set_len"]
 MAX_CAPTCHA = arg_settings["max_captcha"]
 
-
-
 test_captcha_file_path = arg_settings["test_captcha_file_path"]
-
 
 #存放训练好的模型的路径
 MODEL_SAVE_PATH = arg_settings["model_save_path"]
-
-
 
 
 class ImageHandler:
@@ -100,7 +91,6 @@ class ImageHandler:
             vector[idx] = 1
         return vector
 
-
     @classmethod
     def vec2text(cls, vec):
         text = []
@@ -114,11 +104,11 @@ class ImageHandler:
 
     @staticmethod
     def get_captcha_code_and_image():
-        for captcha in FileDirHelper.get_captcha_list(captcha_file_path=test_captcha_file_path, recursion=False):
+        for captcha in FileDirHelper.get_captcha_list(
+                captcha_file_path=test_captcha_file_path, recursion=False):
             captcha_code = captcha.split("-")[1].split(".")[0]
             captcha_img = Image.open(captcha)
             captcha_img = np.array(captcha_img)
-            # TODO: 这里不应该yield,等会再修改
             yield captcha_code, captcha_img
 
     @classmethod
@@ -135,9 +125,8 @@ class ImageHandler:
             text, image = cls.captcha.gen_captcha_text_and_image()
             image = cls.convert2gray(image)
 
-            batch_x[i, :] = image.flatten() / 255  # (image.flatten()-128)/128  mean为0
+            batch_x[i, :] = image.flatten(
+            ) / 255  # (image.flatten()-128)/128  mean为0
             batch_y[i, :] = cls.text2vec(text)
 
         return batch_x, batch_y
-
-

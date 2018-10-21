@@ -14,7 +14,7 @@ settings = {
     "predict_img_path": "/data/captcha/predict/predict_test_image.txt"
 }
 
-
-X= tf.placeholder(tf.float32, [None, settings["height"] * settings["width"]])
-Y = tf.placeholder(tf.float32, [None, settings["max_captcha"]* settings["char_set_len"]])
 keep_prob = tf.placeholder(tf.float32)
+X = tf.placeholder(tf.float32, [None, settings["height"] * settings["width"]])
+Y = tf.placeholder(tf.float32,
+                   [None, settings["max_captcha"] * settings["char_set_len"]])

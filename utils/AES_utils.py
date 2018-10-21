@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # encoding=utf-8
 
-
 import base64
 
 from Crypto import Random
@@ -11,7 +10,6 @@ from utils.settings import settings
 
 
 class MyCrypt:
-
     def __init__(self, key=settings["key"]):
         self.bs = 32
         if len(key) >= 32:
@@ -60,10 +58,11 @@ class MyCrypt:
         return '%s%s' % (cipher.decrypt(body), raw[length - left:])
 
     def _pad(self, s):
-        return s + (self.bs - len(s) % self.bs) * chr(self.bs - len(s) % self.bs)
+        return s + (
+            self.bs - len(s) % self.bs) * chr(self.bs - len(s) % self.bs)
 
     def _unpad(self, s):
-        return s[:-ord(s[len(s)-1:])]
+        return s[:-ord(s[len(s) - 1:])]
 
     def _str2bin(self, s):
         assert len(s) % 2 == 0
@@ -72,6 +71,7 @@ class MyCrypt:
             j = s[i] + s[i + 1]
             t.append(chr(int(j, 16)))
         return ''.join(t)
+
 
 class Base64AESCBC:
     def __init__(self):
@@ -93,5 +93,4 @@ class Base64AESCBC:
         return s + lfsize * chr(lfsize)
 
     def _unpad(self, s):
-        return s[:-ord(s[len(s)-1:])]
-
+        return s[:-ord(s[len(s) - 1:])]

@@ -22,16 +22,16 @@ test_data_dir = FileDirHelper.make_dir("/data/captcha/image/test/")
 
 
 class Captcha:
-
     def __init__(self):
         self.img = ImageCaptcha()
         self.base = Base64AESCBC()
         self.mc = MyCrypt()
 
     def gen_captcha_code(self):
-        rnd = self.base.encrypt(json.dumps({
-            'rnd': ''.join([choice(alphabets) for i in range(4)]),
-        }))
+        rnd = self.base.encrypt(
+            json.dumps({
+                'rnd': ''.join([choice(alphabets) for i in range(4)]),
+            }))
         data = json.loads(self.mc.decrypt(rnd))
 
         return data["rnd"]
@@ -56,8 +56,6 @@ class Captcha:
             code, image = self.gen_captcha_text_and_image()
             if image.shape == (60, 160, 3):
                 return code, image
-
-
 
     def generateMassImages(self, usage_purpose="train"):
         if usage_purpose == "train":
@@ -90,6 +88,3 @@ def main():
     captcha = Captcha()
     captcha.generateMassImages(usage_purpose="train")
     captcha.generateMassImages(usage_purpose="test")
-
-
-

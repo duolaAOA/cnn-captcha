@@ -5,7 +5,6 @@ import os
 
 
 class FileDirHelper:
-
     @staticmethod
     def make_dir(file_path) -> str:
         abspath = os.path.abspath(file_path)
@@ -30,5 +29,6 @@ class FileDirHelper:
             if os.path.isfile(full_path):
                 res.append(full_path)
             if recursion and os.path.isdir(full_path):
-                res.extend(cls.get_captcha_list(full_path, recursion=recursion))
+                res.extend(
+                    cls.get_captcha_list(full_path, recursion=recursion))
         return res
