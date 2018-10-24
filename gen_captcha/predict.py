@@ -123,10 +123,13 @@ class HackCaptcha:
         with tf.Session() as sess:
             sess.run(tf.initialize_all_variables())
 
-            checkpoint = tf.train.get_checkpoint_state(arg_settings["model_save_path"])
+            checkpoint = tf.train.get_checkpoint_state(
+                arg_settings["model_save_path"])
             if checkpoint and checkpoint.model_checkpoint_path:
                 saver.restore(
-                    sess,tf.train.latest_checkpoint( arg_settings["model_save_path"]))
+                    sess,
+                    tf.train.latest_checkpoint(
+                        arg_settings["model_save_path"]))
                 print("Successfully loaded:", checkpoint.model_checkpoint_path)
             else:
                 raise FileNotFoundError("Could not find old models")
@@ -144,7 +147,8 @@ class HackCaptcha:
                 predict_text = self._hack_wrap(sess, predict, img)
                 if captcha_code == predict_text:
                     print(f"标记: {captcha_code}  成功预测: {predict_text}")
-                    self.save_predict_res(f"标记: {captcha_code}  成功预测: {predict_text}")
+                    self.save_predict_res(
+                        f"标记: {captcha_code}  成功预测: {predict_text}")
                 else:
                     print(f"标记: {captcha_code}  预测: {predict_text}")
 

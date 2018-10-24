@@ -5,7 +5,7 @@ import numpy as np
 
 from captcha.image import Image
 
-from gen_captcha_img import Captcha
+from gen_captcha_img import Captcha, FreshCaptcha
 from utils.utils import FileDirHelper
 from settings import settings as arg_settings
 
@@ -29,6 +29,7 @@ MODEL_SAVE_PATH = arg_settings["model_save_path"]
 class ImageHandler:
 
     captcha = Captcha()
+    fresh_captcha = FreshCaptcha()
 
     @staticmethod
     def convert2gray(img):
@@ -123,6 +124,21 @@ class ImageHandler:
 
         for i in range(batch_size):
             text, image = cls.captcha.gen_captcha_text_and_image()
+            image = cls.convert2gray(image)
+
+            batch_x[i, :] = image.flatten(
+            ) / 255  # (image.flatten()-128)/128  mean为0
+            batch_y[i, :] = cls.text2vec(text)
+
+        return batch_x, batch_y
+
+    @classmethod
+    def gen_fresh_batch(cls, batch_size: int = 64):
+        batch_x = np.zeros([batch_size, IMAGE_HEIGHT * IMAGE_WIDTH])
+        batch_y = np.zeros([batch_size, MAX_CAPTCHA * CHAR_SET_LEN])
+
+        for i in range(batch_size):
+            text, image, img = cls.fresh_captcha.gen_captcha_text_and_image()
             image = cls.convert2gray(image)
 
             batch_x[i, :] = image.flatten(
