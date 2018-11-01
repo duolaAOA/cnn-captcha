@@ -3,9 +3,10 @@
 
 import numpy as np
 
+from PIL import Image as PImage
 from captcha.image import Image
 
-from gen_captcha_img import Captcha, FreshCaptcha
+from gen_captcha import Captcha, FreshCaptcha
 from utils.utils import FileDirHelper
 from settings import settings as arg_settings
 
@@ -146,3 +147,12 @@ class ImageHandler:
             batch_y[i, :] = cls.text2vec(text)
 
         return batch_x, batch_y
+
+    @staticmethod
+    def get_fresh_captcha_code_and_image():
+        for captcha in FileDirHelper.get_captcha_list(
+                captcha_file_path=test_captcha_file_path, recursion=False):
+            captcha_code = captcha.split("-")[1].split(".")[0]
+            captcha_img = PImage.open(captcha)
+            captcha_img = np.array(captcha_img)
+            yield captcha_code, captcha_img

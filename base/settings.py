@@ -10,14 +10,13 @@ sys.path.append(os.path.abspath(__file__).rsplit(os.sep, 2)[0])
 from utils.utils import FileDirHelper
 
 settings = {
-    "width": 160,
-    "height": 60,
+    "width": 86,
+    "height": 32,
     "max_captcha": 4,
     "char_set_len": 62,
     "image_path": "/data/captcha/image/train/",
     "test_captcha_file_path": "/data/captcha/image/test/",
-    # "model_save_path": "/data/captcha/models/",
-    "model_save_path": "/data/captcha/zoomeye/models/",
+    "model_save_path": "/data/captcha/zoomeye/models2/",
     "predict_img_path": "/data/captcha/predict/predict_test_image.txt"
 }
 

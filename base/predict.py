@@ -16,15 +16,12 @@ from settings import settings as arg_settings
 CHAR_SET_LEN = arg_settings["char_set_len"]
 MAX_CAPTCHA = arg_settings["max_captcha"]
 
+"""
+模型识别率百分百
+"""
 
 def hack_function(sess, predict, captcha_image):
-    """
-    装载完成识别内容后，
-    :param sess:
-    :param predict:
-    :param captcha_image:
-    :return:
-    """
+
     text_list = sess.run(
         predict,
         feed_dict={
@@ -66,9 +63,7 @@ class HackCaptcha:
     @staticmethod
     def save_predict_res(line):
 
-        with open(
-                arg_settings["predict_img_path"], 'a+',
-                encoding='utf-8') as writer:
+        with open(arg_settings["predict_img_path"], 'w', encoding='utf-8') as writer:
             writer.write(line + "\n")
 
     def hack(self):
@@ -93,7 +88,7 @@ class HackCaptcha:
             stime = time.time()
             right_count = 0
             wrong_count = 0
-            for text, img in ImageHandler.get_captcha_code_and_image():
+            for text, img in ImageHandler.get_fresh_captcha_code_and_image():
                 img = ImageHandler.convert2gray(img)
                 img = img.flatten() / 255
                 predict_text = self._hack_wrap(sess, predict, img)
@@ -103,7 +98,7 @@ class HackCaptcha:
                     self.save_predict_res(f"标记: {text}  成功预测: {predict_text}")
                 else:
                     wrong_count += 1
-                    print(f"标记: {text}  预测: {predict_text}")
+                    print(f"标记: {text}  预测失败: {predict_text}")
                     self.save_predict_res(f"标记: {text}  预测失败: {predict_text}")
 
             res = 'task:', wrong_count, ' cost time:', (
@@ -111,7 +106,7 @@ class HackCaptcha:
             res_count = 'right/total-----', right_count, '/', wrong_count
             print(res)
             print('right/total-----', right_count, '/', wrong_count)
-            self.save_predict_res(res)
+            self.save_predict_res(str(res))
             self.save_predict_res(str(res_count))
 
     def _hack_test_captcha(self):
@@ -137,7 +132,6 @@ class HackCaptcha:
             for img in img_lst:
                 im = Image.open(img)
                 im.show()
-                captcha_code = img.split("-")[1].split(".")[0]
 
                 captcha_img = Image.open(img)
                 captcha_img = np.array(captcha_img)
@@ -145,15 +139,11 @@ class HackCaptcha:
                 img = ImageHandler.convert2gray(captcha_img)
                 img = img.flatten() / 255
                 predict_text = self._hack_wrap(sess, predict, img)
-                if captcha_code == predict_text:
-                    print(f"标记: {captcha_code}  成功预测: {predict_text}")
-                    self.save_predict_res(
-                        f"标记: {captcha_code}  成功预测: {predict_text}")
-                else:
-                    print(f"标记: {captcha_code}  预测: {predict_text}")
+                print(f"预测结果: {predict_text}")
+                im.close()
 
 
 if __name__ == '__main__':
     hack = HackCaptcha()
-    hack.hack()
-    # hack._hack_test_captcha()
+    # hack.hack()
+    hack._hack_test_captcha()

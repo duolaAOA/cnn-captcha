@@ -13,7 +13,7 @@ from utils.utils import FileDirHelper
 
 print(os.getcwd())
 os.chdir("../test_captcha")
-MAX_CAPTCHA_NUM = 1000
+MAX_CAPTCHA_NUM = 10
 
 
 def resize_img(file_dir: str = ".",
@@ -32,17 +32,17 @@ def download():
     headers = {
         "User-Agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit"
-        "/537.36 (KHTML, like Gecko) Chrome/68.0.3440.84 Safari/537.36"
+        "/537.36 (KHTM  L, like Gecko) Chrome/68.0.3440.84 Safari/537.36"
     }
 
     for i in range(MAX_CAPTCHA_NUM):
-        t = str(int(time() * 1000))
+        t = str(int(time() * 10))
         url = f"http://139.199.188.178:8080/captcha/?t={t}"
         image = requests.get(url=url, headers=headers).content
         print(f"正在下载第{i}张图片")
         with open(str(i) + ".gif", "wb") as f:
             f.write(image)
-    resize_img()
 
 
-# download()
+
+download()

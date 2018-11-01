@@ -81,8 +81,8 @@ class FreshCaptcha:
         self.base = Base64AESCBC()
         self.mc = MyCrypt()
         # 验证码图片尺寸
-        self.img_width = 160
-        self.img_height = 60
+        self.img_width = 86
+        self.img_height = 32
         # 字体颜色
         self.font_color = [
             'goldenrod', 'teal', 'chocolate', 'darkolivegreen', 'plum'
@@ -162,7 +162,7 @@ class FreshCaptcha:
 
         if usage_purpose == "test":
             os.chdir(test_data_dir)
-            for i in range(5000):
+            for i in range(2000):
                 self._gen_captcha_code_and_image(i)
                 print("test images:" + str(i) + ' images')
 
@@ -183,7 +183,7 @@ def showCaptcha1():
 def showCaptcha2():
     # test
     captcha = FreshCaptcha()
-    text, image = captcha.gen_captcha_text_and_image()
+    text, image, img = captcha.gen_captcha_text_and_image()
 
     f = plt.figure()
     ax = f.add_subplot(111)
@@ -201,5 +201,8 @@ def main():
 
 def main2():
     captcha = FreshCaptcha()
-    captcha.generateMassImages(usage_purpose="train")
-    # captcha.generateMassImages(usage_purpose="test")
+    # captcha.generateMassImages(usage_purpose="train")
+    captcha.generateMassImages(usage_purpose="test")
+
+
+
