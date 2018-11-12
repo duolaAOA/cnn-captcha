@@ -37,7 +37,7 @@ def download():
 
     for i in range(MAX_CAPTCHA_NUM):
         t = str(int(time() * 10))
-        url = f"http://139.199.188.178:8080/captcha/?t={t}"
+        url = f"http://sso.telnet404.com/captcha/?t={t}"
         image = requests.get(url=url, headers=headers).content
         print(f"正在下载第{i}张图片")
         with open(str(i) + ".gif", "wb") as f:
